@@ -1,0 +1,4 @@
+tests:
+  - path: 'acme/xqhv-main/sys/mounts'
+    actions: [list]
+    result: true

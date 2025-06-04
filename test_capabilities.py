@@ -4,6 +4,12 @@ import hvac, os, argparse, datetime, hcl, glob
 import subprocess, logging, re
 from requests import Request, Session
 
+class LowercaseBooleanEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, bool):
+            return str(obj).lower()
+        return super().default(obj)
+
 def test_capabilities(test, admin, client, policy_name):
     test_result = {
         "policy_name": policy_name,
@@ -201,7 +207,7 @@ with open('sudo_paths.json') as f:
 
 if argumentSet == 1:
     results = prepare_policy(args.policy, args.tests, clientAdmin)
-    print(results)
+    print(json.dumps(results, cls=LowercaseBooleanEncoder))
 
     if args.jsonout:
         policy_to_json(args.policy)
@@ -222,10 +228,10 @@ if argumentSet == 2:
         if args.jsonout:
             policy_to_json(policy_file)
     logging.info("All tests completed")
-    print(json.dumps(all_tests))
+    print(json.dumps(all_tests, cls=LowercaseBooleanEncoder))
 
     if os.getenv("GITHUB_ACTIONS") != None:
-        set_multiline_output("test_results", json.dumps(all_tests))
+        set_multiline_output("test_results", json.dumps(all_tests, cls=LowercaseBooleanEncoder))
 
 if args.vaultdev:
     logging.info("Killing Vault dev server")

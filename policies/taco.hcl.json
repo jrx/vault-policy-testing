@@ -1,0 +1,1 @@
+{"path": {"secret/data/taco": {"capabilities": ["read"]}, "secret/data/+/taco/*": {"capabilities": ["create", "list", "update", "delete", "read"]}, "mykv/*": {"capabilities": ["read", "create", "update"]}}}
